@@ -16,8 +16,7 @@ public class Biblioteca {
     this.libros = new ArrayList<Libro>();
   }
 
-  // Getters
-
+  // Getters:
   /**
    * @return (List<Usuario>) Retorna una copia a la lista de los usuarios
    *         existentes.
@@ -33,8 +32,7 @@ public class Biblioteca {
     return new ArrayList<>(this.libros);
   }
 
-  // Managment functons
-
+  // Managment functons:
   /**
    * @param titulo (String) Indica el titulo del nuevo libro.
    * @param autor  (String) Indica el autor del nuevo libro.
@@ -66,7 +64,7 @@ public class Biblioteca {
 
   /**
    * @param idLibro (int) Indica el id del libro a buscar
-   * @return (Libro) Retorna el libro si existe. NULL si no existe.
+   * @return (boolean) Retorna un booleano que indica si existe o no el libro
    */
   protected boolean existBook(int idLibro) {
     for (Libro libroActual : this.libros) {
@@ -77,13 +75,31 @@ public class Biblioteca {
     return false;
   }
 
+  /**
+   * @param idLibro (int) Indica el id del libro que se quiere prestar.
+   */
   public void lendBook(int idLibro) {
     if (idLibro < 0)
       throw new IllegalArgumentException("El ID del libro no puede ser engativo");
-    if (existBook(idLibro) == false)
+    if (!existBook(idLibro))
       throw new LibroNotFoundException(idLibro);
+
+    if (this.libros.get(idLibro).getState() == false)
+      throw new LibroNotAvailableException(this.libros.get(idLibro).getTitulo());
 
     this.libros.get(idLibro).setState(false);
   }
 
+  /**
+   * @param idLibro (int) Indica el id del libro a devolver.
+   */
+  public void devolverLibro(int idLibro) {
+    if (idLibro < 0)
+      throw new IllegalArgumentException("El ID del libro no puede ser negativo");
+    if (!existBook(idLibro))
+      throw new LibroNotFoundException(idLibro);
+
+    if (!this.libros.get(idLibro).getState())
+      this.libros.get(idLibro).setState(true);
+  }
 }
