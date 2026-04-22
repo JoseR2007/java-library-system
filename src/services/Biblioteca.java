@@ -3,6 +3,7 @@ package src.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.exceptions.*;
 import src.models.Libro;
 import src.models.Usuario;
 
@@ -67,21 +68,22 @@ public class Biblioteca {
    * @param idLibro (int) Indica el id del libro a buscar
    * @return (Libro) Retorna el libro si existe. NULL si no existe.
    */
-  protected Libro findBook(int idLibro) {
+  protected boolean existBook(int idLibro) {
     for (Libro libroActual : this.libros) {
       if (libroActual.getId() == idLibro)
-        return libroActual;
+        return true;
     }
 
-    return null;
+    return false;
   }
 
-  public void lenBook(int idLibro) {
+  public void lendBook(int idLibro) {
     if (idLibro < 0)
       throw new IllegalArgumentException("El ID del libro no puede ser engativo");
+    if (existBook(idLibro) == false)
+      throw new LibroNotFoundException(idLibro);
 
-    if (findBook(idLibro) == null) {
-    }
+    this.libros.get(idLibro).setState(false);
   }
 
 }
