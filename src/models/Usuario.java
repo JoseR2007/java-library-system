@@ -1,4 +1,4 @@
-package src;
+package src.models;
 
 public class Usuario {
   private static int cantUsuarios = 0; // Cantidad de Usuarios existentes en la app.

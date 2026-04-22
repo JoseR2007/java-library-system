@@ -1,9 +1,10 @@
-package src.manage;
+package src.services;
 
-// Imports:
-import src.Usuario;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.models.Libro;
+import src.models.Usuario;
 
 public class Biblioteca {
   private List<Usuario> usuarios;
@@ -60,6 +61,27 @@ public class Biblioteca {
     }
 
     this.usuarios.add(nuevo_usuario);
+  }
+
+  /**
+   * @param idLibro (int) Indica el id del libro a buscar
+   * @return (Libro) Retorna el libro si existe. NULL si no existe.
+   */
+  protected Libro findBook(int idLibro) {
+    for (Libro libroActual : this.libros) {
+      if (libroActual.getId() == idLibro)
+        return libroActual;
+    }
+
+    return null;
+  }
+
+  public void lenBook(int idLibro) {
+    if (idLibro < 0)
+      throw new IllegalArgumentException("El ID del libro no puede ser engativo");
+
+    if (findBook(idLibro) == null) {
+    }
   }
 
 }

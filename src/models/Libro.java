@@ -1,4 +1,4 @@
-package src.manage;
+package src.models;
 
 public class Libro {
   public static int cantLibros = 0; // Cantidad de libros existentes en la app
