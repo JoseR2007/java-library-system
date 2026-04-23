@@ -102,4 +102,15 @@ public class Biblioteca {
     if (!this.libros.get(idLibro).getState())
       this.libros.get(idLibro).setState(true);
   }
+
+  public void getFullData() {
+    for (Libro libroActual : this.libros) {
+      String estadoLibro;
+      if (libroActual.getState())
+        estadoLibro = "Disponible";
+      else
+        estadoLibro = "Ocupado";
+      System.err.println(libroActual.getId() + " " + libroActual.getTitulo() + "\t" + estadoLibro);
+    }
+  }
 }
