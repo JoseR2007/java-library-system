@@ -2,6 +2,7 @@ package src.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import src.exceptions.*;
 import src.models.Libro;
@@ -30,6 +31,34 @@ public class Biblioteca {
    */
   public List<Libro> getLibros() {
     return new ArrayList<>(this.libros);
+  }
+
+  public Libro getLibrobyId(int id) {
+    if (id < 0)
+      throw new IllegalArgumentException("El ID debe ser un numero positivo");
+
+    for (Libro libroActual : this.libros) {
+      if (libroActual.getId() == id)
+        return libroActual;
+    }
+
+    return null;
+  }
+
+  /**
+   * @return (List<Libro>) Retorna los libros que se encuentren diponibles
+   *         (state = true).
+   */
+  public List<Libro> getLibrosDisponibles() {
+    return this.libros.stream().filter(libro -> libro.getState()).collect(Collectors.toList());
+  }
+
+  /**
+   * @return (List<Libro>) Retorna los libros que NO se encuentran disponbles
+   *         (state = false).
+   */
+  public List<Libro> getLibrosOcupados() {
+    return this.libros.stream().filter(libro -> !libro.getState()).collect(Collectors.toList());
   }
 
   // Managment functons:
@@ -101,16 +130,5 @@ public class Biblioteca {
 
     if (!this.libros.get(idLibro).getState())
       this.libros.get(idLibro).setState(true);
-  }
-
-  public void getFullData() {
-    for (Libro libroActual : this.libros) {
-      String estadoLibro;
-      if (libroActual.getState())
-        estadoLibro = "Disponible";
-      else
-        estadoLibro = "Ocupado";
-      System.err.println(libroActual.getId() + " " + libroActual.getTitulo() + "\t" + estadoLibro);
-    }
   }
 }
