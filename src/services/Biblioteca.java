@@ -50,7 +50,7 @@ public class Biblioteca {
    *         (state = true).
    */
   public List<Libro> getLibrosDisponibles() {
-    return this.libros.stream().filter(libro -> libro.getState()).collect(Collectors.toList());
+    return this.libros.stream().filter(libro -> libro.isDisponible()).collect(Collectors.toList());
   }
 
   /**
@@ -58,7 +58,7 @@ public class Biblioteca {
    *         (state = false).
    */
   public List<Libro> getLibrosOcupados() {
-    return this.libros.stream().filter(libro -> !libro.getState()).collect(Collectors.toList());
+    return this.libros.stream().filter(libro -> !libro.isDisponible()).collect(Collectors.toList());
   }
 
   // Managment functons:
@@ -92,31 +92,18 @@ public class Biblioteca {
   }
 
   /**
-   * @param idLibro (int) Indica el id del libro a buscar
-   * @return (boolean) Retorna un booleano que indica si existe o no el libro
-   */
-  protected boolean existBook(int idLibro) {
-    for (Libro libroActual : this.libros) {
-      if (libroActual.getId() == idLibro)
-        return true;
-    }
-
-    return false;
-  }
-
-  /**
    * @param idLibro (int) Indica el id del libro que se quiere prestar.
    */
   public void lendBook(int idLibro) {
     if (idLibro < 0)
       throw new IllegalArgumentException("El ID del libro no puede ser engativo");
-    if (!existBook(idLibro))
+    if (getLibrobyId(idLibro) == null)
       throw new LibroNotFoundException(idLibro);
 
-    if (this.libros.get(idLibro).getState() == false)
+    if (this.libros.get(idLibro).isDisponible() == false)
       throw new LibroNotAvailableException(this.libros.get(idLibro).getTitulo());
 
-    this.libros.get(idLibro).setState(false);
+    this.libros.get(idLibro).setDisponible(false);
   }
 
   /**
@@ -125,10 +112,10 @@ public class Biblioteca {
   public void devolverLibro(int idLibro) {
     if (idLibro < 0)
       throw new IllegalArgumentException("El ID del libro no puede ser negativo");
-    if (!existBook(idLibro))
+    if (getLibrobyId(idLibro) == null)
       throw new LibroNotFoundException(idLibro);
 
-    if (!this.libros.get(idLibro).getState())
-      this.libros.get(idLibro).setState(true);
+    if (!this.libros.get(idLibro).isDisponible())
+      this.libros.get(idLibro).setDisponible(true);
   }
 }

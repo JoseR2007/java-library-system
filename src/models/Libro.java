@@ -50,14 +50,14 @@ public class Libro {
    * @return (boolean) Retorna el estado actual del libro (disponible o no
    *         disponible)
    */
-  public boolean getState() {
+  public boolean isDisponible() {
     return this.disponible;
   }
 
   /**
    * @param newState (boolean) El nuevo estado del libro
    */
-  public void setState(boolean newState) {
+  public void setDisponible(boolean newState) {
     this.disponible = newState;
   }
 
