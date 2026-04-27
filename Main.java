@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import src.models.Libro;
+import src.models.Usuario;
 import src.services.*;
 import src.exceptions.*;
 
@@ -100,6 +101,7 @@ public class Main {
       }
    }
 
+   // TODO: manejar unicamente libros de un usuario concreto
    public static void devolverLibro() {
       if (biblioteca.getLibrosOcupados().isEmpty()) {
          System.out.println("No existen libro ocupados");
@@ -122,11 +124,25 @@ public class Main {
 
    // Mostrar informacion al usuario:
 
+   public static void mostrarLibrosDeUnUsuario(Usuario usuario) {
+      List<Libro> libros = biblioteca.getLibrosByUser(usuario);
+      if (libros.isEmpty()) {
+         System.out.println("Este usuario no tiene libros agregados");
+         return;
+      }
+
+      libros.forEach(
+            libro -> System.out.println(libro.getId() + "\t'" + libro.getTitulo() + "' by " + libro.getAutor()));
+   }
+
+   // TODO: Verificar si sigue siendo necesaria
    public static void mostrarLibrosNoDisponibles() {
       imprimirSeparador();
       List<Libro> librosOcupados = biblioteca.getLibrosOcupados();
-      if (librosOcupados.isEmpty())
+      if (librosOcupados.isEmpty()) {
          System.out.println("No existen libros ocupados");
+         return;
+      }
 
       librosOcupados.forEach(
             libro -> System.out.println(libro.getId() + "\t'" + libro.getTitulo() + "' by " + libro.getAutor()));
@@ -135,19 +151,22 @@ public class Main {
    public static void mostrarLibrosDisponibles() {
       imprimirSeparador();
       List<Libro> librosDisponibles = biblioteca.getLibrosDisponibles();
-      if (librosDisponibles.isEmpty())
+      if (librosDisponibles.isEmpty()) {
          System.out.println("No existen libros disponibles");
+         return;
+      }
 
-      librosDisponibles
-            .forEach(
-                  libro -> System.out.println(libro.getId() + "\t'" + libro.getTitulo() + "' by " + libro.getAutor()));
+      librosDisponibles.forEach(
+            libro -> System.out.println(libro.getId() + "\t'" + libro.getTitulo() + "' by " + libro.getAutor()));
    }
 
    public static void mostrarLibros() {
       imprimirSeparador();
       List<Libro> libros = biblioteca.getLibros();
-      if (libros.isEmpty())
+      if (libros.isEmpty()) {
          System.out.println("Aun no sea creado ningun libro");
+         return;
+      }
 
       for (Libro libroActual : libros) {
          if (libroActual.isDisponible())
@@ -157,5 +176,16 @@ public class Main {
             System.out.println(libroActual.getId() + "\t'" + libroActual.getTitulo() + "' by " + libroActual.getAutor()
                   + "\tOcupado");
       }
+   }
+
+   public static void mostrarUsuarios() {
+      imprimirSeparador();
+      List<Usuario> usuarios = biblioteca.getUsuarios();
+      if (usuarios.isEmpty()) {
+         System.out.println("Aun no existen usuarios");
+         return;
+      }
+
+      usuarios.forEach(usuario -> System.out.println(usuario.getId() + "\t" + usuario.getName()));
    }
 }

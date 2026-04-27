@@ -1,21 +1,21 @@
 package src.models;
 
 public class Usuario {
-  private static int cantUsuarios = 0; // Cantidad de Usuarios existentes en la app.
-
   private int id;
   private String name;
 
   /**
    * @param name (String) Indica el nombre del usuario.
    */
-  public Usuario(String name) {
+  public Usuario(int id, String name) {
     if (name == null || name.isEmpty())
       throw new IllegalArgumentException("Nombre de usuario invalido (vacio)");
 
+    if (id < 0)
+      throw new IllegalArgumentException("El id no puede ser negativo");
+
     this.name = name;
-    this.id = cantUsuarios;
-    cantUsuarios++;
+    this.id = id;
   }
 
   /**
