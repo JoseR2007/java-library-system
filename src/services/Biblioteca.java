@@ -64,10 +64,33 @@ public class Biblioteca {
       return this.libros.stream().filter(libro -> !libro.isDisponible()).collect(Collectors.toList());
    }
 
+   /**
+    * @param usuario (Usuario) Indica el usuario a buscar
+    * @return (List<Libro>) Retorna una lista con los libros de dicho usuario
+    */
    public List<Libro> getLibrosByUser(Usuario usuario) {
       return this.libros.stream()
-            .filter(libro -> libro.getUsuario() != null && libro.getUsuario().getId() == usuario.getId())
+            .filter(libro -> {
+               if (libro.getUsuario() != null) {
+                  if (libro.getUsuario().getId() == usuario.getId())
+                     return true;
+               }
+
+               return false;
+            })
             .collect(Collectors.toList());
+   }
+
+   /**
+    * @param id (int) Indica el id del usuario
+    * @return (Usuario) Devuelve el usuario con el id rescibido si existe
+    */
+   public Usuario getUsuarioById(int id) {
+      for (Usuario user : this.usuarios)
+         if (user.getId() == id)
+            return user;
+
+      return null;
    }
 
    // Managment functons:
@@ -103,7 +126,7 @@ public class Biblioteca {
    /**
     * @param idLibro (int) Indica el id del libro que se quiere prestar.
     */
-   public void lendBook(int idLibro) {
+   public void lendBook(int idLibro, Usuario nuevoUsuario) {
       if (idLibro < 0)
          throw new IllegalArgumentException("El ID del libro no puede ser engativo");
       if (getLibrobyId(idLibro) == null)
@@ -113,7 +136,7 @@ public class Biblioteca {
       if (libroBuscado.isDisponible() == false)
          throw new LibroNotAvailableException(libroBuscado.getTitulo());
 
-      libroBuscado.prestarLibro(null);
+      libroBuscado.prestarLibro(nuevoUsuario);
    }
 
    /**

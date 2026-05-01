@@ -80,45 +80,60 @@ public class Main {
    }
 
    public static void prestarLibro() {
-      if (biblioteca.getLibrosDisponibles().isEmpty()) {
-         System.out.println("No existen libros disponibles");
+      imprimirSeparador();
+      int ind;
+      do {
+         mostrarUsuarios();
+         System.out.print("Digite el id del usuario que necesita el libro: ");
+         ind = scan.nextInt();
+      } while (ind < 0);
+
+      Usuario selUsuario = biblioteca.getUsuarioById(ind);
+      if (selUsuario == null) {
+         System.out.println("Ese usuario no esta disponible");
          return;
       }
 
-      int opcion;
       do {
          mostrarLibrosDisponibles();
-         System.err.print("\nIngrese el ID del libro a prestar: ");
-         opcion = scan.nextInt();
-      } while (opcion < 0);
+         System.out.print("Digite el id del libro a prestar: ");
+         ind = scan.nextInt();
+      } while (ind < 0);
 
       try {
-         biblioteca.lendBook(opcion);
-      } catch (LibroNotFoundException e) {
+         biblioteca.lendBook(ind, selUsuario);
+      } catch (LibroNotAvailableException | LibroNotFoundException e) {
          System.out.println(e.getMessage());
-      } catch (LibroNotAvailableException e) {
-         System.out.println(e.getMessage() + e.getNameLibro());
+         return;
       }
    }
 
-   // TODO: manejar unicamente libros de un usuario concreto
    public static void devolverLibro() {
-      if (biblioteca.getLibrosOcupados().isEmpty()) {
-         System.out.println("No existen libro ocupados");
+      imprimirSeparador();
+      int ind;
+      do {
+         mostrarUsuarios();
+         System.out.print("Digite el id del usuario que posee el libro: ");
+         ind = scan.nextInt();
+      } while (ind < 0);
+
+      Usuario usuarioSeleccionado = biblioteca.getUsuarioById(ind);
+      if (usuarioSeleccionado == null) {
+         System.out.println("Ese usuario no existe");
          return;
       }
 
-      int opcion;
       do {
-         mostrarLibrosNoDisponibles();
-         System.out.print("\nDigite el ID del libro a devolver: ");
-         opcion = scan.nextInt();
-      } while (opcion < 0);
+         mostrarLibrosDeUnUsuario(usuarioSeleccionado);
+         System.out.print("Digite el id el libro a devolver");
+         ind = scan.nextInt();
+      } while (ind < 0);
 
       try {
-         biblioteca.devolverLibro(opcion);
-      } catch (IllegalArgumentException | LibroNotFoundException e) {
+         biblioteca.devolverLibro(ind);
+      } catch (LibroNotFoundException e) {
          System.out.println(e.getMessage());
+         return;
       }
    }
 
@@ -132,19 +147,6 @@ public class Main {
       }
 
       libros.forEach(
-            libro -> System.out.println(libro.getId() + "\t'" + libro.getTitulo() + "' by " + libro.getAutor()));
-   }
-
-   // TODO: Verificar si sigue siendo necesaria
-   public static void mostrarLibrosNoDisponibles() {
-      imprimirSeparador();
-      List<Libro> librosOcupados = biblioteca.getLibrosOcupados();
-      if (librosOcupados.isEmpty()) {
-         System.out.println("No existen libros ocupados");
-         return;
-      }
-
-      librosOcupados.forEach(
             libro -> System.out.println(libro.getId() + "\t'" + libro.getTitulo() + "' by " + libro.getAutor()));
    }
 

@@ -66,11 +66,15 @@ public class Libro {
 
   // ====== Setters ======
 
+  /**
+   * @param nuevoUsuario (Usuario) Indica el nuevo usuario al que pertenece el
+   *                     libro
+   */
   public void prestarLibro(Usuario nuevoUsuario) {
     if (nuevoUsuario.getName().isEmpty())
       throw new IllegalArgumentException("El nuevo usuario no puede tener propiedades vacias.");
 
-    if (this.disponible == true)
+    if (this.disponible == false)
       throw new LibroNotAvailableException(this.titulo);
 
     this.usuarioPrestado = nuevoUsuario;
